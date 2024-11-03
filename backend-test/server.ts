@@ -1,3 +1,5 @@
+import * as dotenv from 'dotenv';
+dotenv.config();
 import express from "express";
 import { Express,Request, Response } from "express";  
 import axios from "axios";
@@ -12,16 +14,20 @@ import {
   VcLinkedCredentialClaim,
   VcNotEmptyClaim,
 } from "@truvity/sdk";
-import "dotenv/config";
+const TIM_API_KEY="OrYwtDDJnaF3wMieDkdVyBzdXh48LNIJ7hOIazEAgr5rGNUuzD9ibobR9vxq28fabfbGiF565fBivGIXABNNP0YaH_9J3BttvcavUcrGen_ACc_vUTmRBzBtQbJmbL66MbXNqJZvP59D3f_234ixHC6Sh-gEeTRDVAN7Wb79ZBz1pO_Bs-sMZJ-W-I222_AhjepKcSzW7H108VNpOWbspV3-kpz1J6_rTpe5vPPynxxwpg8U-yEHBkJ_dmyk-9MR-MVAGnxZBR0xnz86euvqY9aLtKiVXzSGVcgBPY6-g307XBLPLCtWG6fp2w86bPLiGCjXFOA63ae9Ec-bIVO_9w";
+const AIRLINE_API_KEY="jaaKKF3JTulaMs845qqS0NJRR8pR87ULisr4xnEF0283qdFZpHY7sqA1bY3-I2MxBVyirng1EowqTmI4N05UNvB-K_O2pjf2wZoKsM1pZpSnW4v7JZX17aFaxjWuFwbW_ZZhyCvpuvJt8zMtCob9G30HsyU_jEnT1Pl7DKTaybogxcJvTCltGN6dfpVelBd0XuZ_WAMJe0TW3kuDKhqWVC-woLe5zyZf6Ij5PYxqqEGg6Ve2kqGNdNhn3ZqHqLlwSY2uBieUDU832UVjb3tPF3DoE_1GWjFtTsrCXJVXBmYiJa1gICbGJnsu87E0R1jA1HKyuidcq4Rjp5keY930Pw";
 const miko_client = new TruvityClient({
-  apiKey: process.env.TIM_API_KEY,
+  apiKey:TIM_API_KEY,
+  environment: "https://api.truvity.cloud",
+});
+// const key =TIM_API_KEY;
+// console.log(key);
+// console.log(process.env); // To see all loaded environment variables
+const employer_client = new TruvityClient({
+  apiKey: AIRLINE_API_KEY,
   environment: "https://api.truvity.cloud",
 });
 
-const employer_client = new TruvityClient({
-  apiKey: process.env.AIRLINE_API_KEY,
-  environment: "https://api.truvity.cloud",
-});
 
 @VcContext({
   name: "employmentcontractrequest",
@@ -110,8 +116,10 @@ async function miko_to_employer_to_miko() {
     console.log("Miko key generated:", mikoKey.id);
     const proofofidentityVc = await proofofidentityDraft.issue(mikoKey.id);
     console.log("Employment request VC issued");
+
     await proofofidentityVc.send(employerDid, mikoKey.id);
     console.log("Employment request VC sent to Employer");
+
   } catch (error) {
     console.error("Error during miko request employment contract", error);
   }
@@ -198,6 +206,7 @@ async function miko_to_employer_to_miko() {
     });
     console.log("contract draft created");
     const contractVc = await contractDraft.issue(employerKey.id);
+    console.log(contractVc);
     console.log("contract VC issued");
 
     const responseDraft = await employmentcontractresponse.create({
@@ -253,11 +262,12 @@ async function miko_to_employer_to_miko() {
     const responseClaims = await employmentcontractresponseVc.getClaims();
     const contractVc = await responseClaims.contract.dereference();
     const contractClaims = await contractVc.getClaims();
-    console.log(
-      `Employment contract details: ${contractClaims.nameofthecompany} (salary: $${
-        contractClaims.salary
-      })`
-    );
+    // console.log(
+    //   `Employment contract details: ${contractClaims.nameofthecompany} (salary: $${
+    //     contractClaims.salary
+    //   })`
+    // );
+    console.log(contractVc);
   } catch (error) {
     console.error("Error during miko handles response:", error);
   }
@@ -531,8 +541,370 @@ async function miko_to_Immigration_Authority_to_miko() {
     console.error("Error during Miko handles response:", error);
   }
 }
+@VcContext({
+  name: "financialstabilityrequest",
+  namespace: "urn:dif:hackathon/MIKO/financial",
+})
+class FinancialStabilityRequest {
+  @VcNotEmptyClaim
+  firstName!: string;
 
-// miko_to_Immigration_Authority_to_miko();
+  @VcNotEmptyClaim
+  lastName!: string;
+
+  @VcNotEmptyClaim
+  email!: string;
+
+  @VcNotEmptyClaim
+  requested_for_purpose!: string; // e.g., loan application, visa, etc.
+}
+
+@VcContext({
+  name: "financialstability",
+  namespace: "urn:dif:hackathon/MIKO/financial",
+})
+class FinancialStability {
+  @VcNotEmptyClaim
+  annual_income!: Number;
+
+  @VcNotEmptyClaim
+  credit_score!: Number;
+
+  @VcNotEmptyClaim
+  assets_worth!: Number;
+
+  @VcNotEmptyClaim
+  outstanding_loans!: Number;
+
+  @VcNotEmptyClaim
+  income_source!: string; // e.g., employment, business, etc.
+}
+
+@VcContext({
+  name: "financialstabilityresponse",
+  namespace: "urn:dif:hackathon/MIKO/financial",
+})
+class FinancialStabilityResponse {
+  @VcNotEmptyClaim
+  @VcLinkedCredentialClaim(FinancialStabilityRequest)
+  request!: LinkedCredential<FinancialStabilityRequest>;
+
+  @VcNotEmptyClaim
+  @VcLinkedCredentialClaim(FinancialStability)
+  financial_details!: LinkedCredential<FinancialStability>;
+
+  @VcNotEmptyClaim
+  issuer_name!: string; // e.g., Municipal Corporation
+}
+
+
+async function miko_to_municipal_corp_to_miko() {
+  // Miko's side code to request proof of financial stability
+
+  try {
+    const { id: municipalDid } = await employer_client.dids.didDocumentSelfGet();
+    const financialRequest = miko_client.createVcDecorator(
+      FinancialStabilityRequest
+    );
+    console.log("Financial stability request VC created");
+
+    const financialRequestDraft = await financialRequest.create({
+      claims: {
+        firstName: "Miko",
+        lastName: "Dif",
+        email: "miko@dif.com",
+        requested_for_purpose: "Visa application",
+      },
+    });
+    console.log("Financial stability request draft created");
+
+    const mikoKey = await miko_client.keys.keyGenerate({
+      data: {
+        type: "ED25519",
+      },
+    });
+    console.log("Miko key generated:", mikoKey.id);
+
+    const financialRequestVc = await financialRequestDraft.issue(mikoKey.id);
+    console.log("Financial stability request VC issued");
+
+    await financialRequestVc.send(municipalDid, mikoKey.id);
+    console.log("Financial stability request VC sent to Municipal Corporation");
+
+  } catch (error) {
+    console.error("Error during Miko's request for financial stability", error);
+  }
+
+  // Municipal Corporation's side code to handle the request and send response
+
+  try {
+    const financialRequest = employer_client.createVcDecorator(
+      FinancialStabilityRequest
+    );
+    const financialDetails = employer_client.createVcDecorator(FinancialStability);
+    const financialResponse = employer_client.createVcDecorator(FinancialStabilityResponse);
+
+    const municipalKey = await employer_client.keys.keyGenerate({
+      data: {
+        type: "ED25519",
+      },
+    });
+    console.log("Municipal key generated:", municipalKey.id);
+
+    const requestResults = await employer_client.credentials.credentialSearch({
+      filter: [
+        {
+          data: {
+            type: {
+              operator: "IN",
+              values: [financialRequest.getCredentialTerm()],
+            },
+          },
+        },
+      ],
+    });
+    console.log("Financial stability requests found:", requestResults.items.length);
+
+    const unfulfilledRequests = requestResults.items; // Assuming no responses yet for simplicity
+
+    // Process the first request
+    const financialDraft = await financialDetails.create({
+      claims: {
+        annual_income: 60000,
+        credit_score: 750,
+        assets_worth: 150000,
+        outstanding_loans: 5000,
+        income_source: "Employment",
+      },
+    });
+    console.log("Financial details draft created");
+
+    const financialVc = await financialDraft.issue(municipalKey.id);
+    console.log("Financial details VC issued");
+
+    const responseDraft = await financialResponse.create({
+      claims: {
+        request: financialRequest.map(unfulfilledRequests[0]),
+        financial_details: financialVc,
+        issuer_name: "Municipal Corporation",
+      },
+    });
+    console.log("Financial stability response draft created");
+
+    const responseVc = await responseDraft.issue(municipalKey.id);
+    console.log("Financial stability response VC issued");
+
+    const presentation = await employer_client
+      .createVpDecorator()
+      .issue([financialVc, responseVc], municipalKey.id);
+
+    const { issuer: requesterDid } = await financialRequest
+      .map(unfulfilledRequests[0])
+      .getMetaData();
+    console.log("Requester DID:", requesterDid);
+
+    await presentation.send(requesterDid, municipalKey.id);
+  } catch (error) {
+    console.error("Error during Municipal Corporation handling request:", error);
+  }
+
+  // Miko's side code to handle the response
+
+  try {
+    const financialResponse = miko_client.createVcDecorator(FinancialStabilityResponse);
+    const result = await miko_client.credentials.credentialSearch({
+      sort: [
+        {
+          field: "DATA_VALID_FROM",
+          order: "DESC",
+        },
+      ],
+      filter: [
+        {
+          data: {
+            type: {
+              operator: "IN",
+              values: [financialResponse.getCredentialTerm()],
+            },
+          },
+        },
+      ],
+    });
+    console.log("Financial stability responses found:", result.items.length);
+
+    const financialResponseVc = financialResponse.map(result.items[0]);
+    const responseClaims = await financialResponseVc.getClaims();
+    const financialVc = await responseClaims.financial_details.dereference();
+    const financialClaims = await financialVc.getClaims();
+
+    console.log("Financial details:", financialClaims);
+  } catch (error) {
+    console.error("Error during Miko handling response:", error);
+  }
+}
+miko_to_municipal_corp_to_miko();
+
+const MUNICIPALITY_API_KEY = AIRLINE_API_KEY;
+const municipality_client = new TruvityClient({
+  apiKey: MUNICIPALITY_API_KEY,
+  environment: "https://api.truvity.cloud",
+});
+
+
+@VcContext({
+  name: "birthcertificaterequest",
+  namespace: "urn:dif:hackathon/MIKO/birth",
+})
+class BirthCertificateRequest {
+  @VcNotEmptyClaim
+  firstName!: string;
+
+  @VcNotEmptyClaim
+  lastName!: string;
+
+  @VcNotEmptyClaim
+  dateOfBirth!: string;
+
+  @VcNotEmptyClaim
+  placeOfBirth!: string;
+
+  @VcNotEmptyClaim
+  parentName!: string;
+}
+
+@VcContext({
+  name: "birthcertificate",
+  namespace: "urn:dif:hackathon/MIKO/birth",
+})
+class BirthCertificate {
+  @VcNotEmptyClaim
+  certificateID!: string;
+
+  @VcNotEmptyClaim
+  firstName!: string;
+
+  @VcNotEmptyClaim
+  lastName!: string;
+
+  @VcNotEmptyClaim
+  dateOfBirth!: string;
+
+  @VcNotEmptyClaim
+  placeOfBirth!: string;
+
+  @VcNotEmptyClaim
+  parentName!: string;
+
+  @VcNotEmptyClaim
+  dateOfIssue!: string;
+}
+
+@VcContext({
+  name: "birthcertificateresponse",
+  namespace: "urn:dif:hackathon/MIKO/birth",
+})
+class BirthCertificateResponse {
+  @VcNotEmptyClaim
+  @VcLinkedCredentialClaim(BirthCertificateRequest)
+  request!: LinkedCredential<BirthCertificateRequest>;
+
+  @VcNotEmptyClaim
+  @VcLinkedCredentialClaim(BirthCertificate)
+  certificate!: LinkedCredential<BirthCertificate>;
+
+  @VcNotEmptyClaim
+  issuingAuthority!: string;
+}
+
+async function miko_to_municipality_to_miko() {
+  // Miko's request for a birth certificate
+  try {
+    const { id: municipalityDid } = await municipality_client.dids.didDocumentSelfGet();
+    const birthCertificateRequest = miko_client.createVcDecorator(BirthCertificateRequest);
+    const requestDraft = await birthCertificateRequest.create({
+      claims: {
+        firstName: "Miko",
+        lastName: "Dif",
+        dateOfBirth: "2000-01-01",
+        placeOfBirth: "Amsterdam",
+        parentName: "John Dif",
+      },
+    });
+    const mikoKey = await miko_client.keys.keyGenerate({ data: { type: "ED25519" } });
+    const requestVc = await requestDraft.issue(mikoKey.id);
+    await requestVc.send(municipalityDid, mikoKey.id);
+    console.log("Birth certificate request sent to Municipality");
+  } catch (error) {
+    console.error("Error during birth certificate request from Miko:", error);
+  }
+
+  // Municipality handling the request and issuing the birth certificate
+  try {
+    const birthCertificateRequest = municipality_client.createVcDecorator(BirthCertificateRequest);
+    const birthCertificate = municipality_client.createVcDecorator(BirthCertificate);
+    const birthCertificateResponse = municipality_client.createVcDecorator(BirthCertificateResponse);
+    const municipalityKey = await municipality_client.keys.keyGenerate({ data: { type: "ED25519" } });
+
+    const requestResults = await municipality_client.credentials.credentialSearch({
+      filter: [
+        {
+          data: { type: { operator: "IN", values: [birthCertificateRequest.getCredentialTerm()] } },
+        },
+      ],
+    });
+
+    const unfulfilledRequests = requestResults.items;
+    console.log("Unfulfilled birth certificate requests:", unfulfilledRequests.length);
+
+    const certificateDraft = await birthCertificate.create({
+      claims: {
+        certificateID: "CERT12345",
+        firstName: "Miko",
+        lastName: "Dif",
+        dateOfBirth: "2000-01-01",
+        placeOfBirth: "Amsterdam",
+        parentName: "John Dif",
+        dateOfIssue: "2024-01-01",
+      },
+    });
+    const certificateVc = await certificateDraft.issue(municipalityKey.id);
+
+    const responseDraft = await birthCertificateResponse.create({
+      claims: {
+        request: birthCertificateRequest.map(unfulfilledRequests[0]),
+        certificate: certificateVc,
+        issuingAuthority: "Amsterdam Municipality",
+      },
+    });
+    const responseVc = await responseDraft.issue(municipalityKey.id);
+    const { issuer: requesterDid } = await birthCertificateRequest.map(unfulfilledRequests[0]).getMetaData();
+    await responseVc.send(requesterDid, municipalityKey.id);
+    console.log("Birth certificate response sent to Miko");
+  } catch (error) {
+    console.error("Error during Municipality handling request:", error);
+  }
+
+  // Miko handling the response
+  try {
+    const birthCertificateResponse = miko_client.createVcDecorator(BirthCertificateResponse);
+    const result = await miko_client.credentials.credentialSearch({
+      sort: [{ field: "DATA_VALID_FROM", order: "DESC" }],
+      filter: [
+        { data: { type: { operator: "IN", values: [birthCertificateResponse.getCredentialTerm()] } } },
+      ],
+    });
+
+    const birthCertificateResponseVc = birthCertificateResponse.map(result.items[0]);
+    const responseClaims = await birthCertificateResponseVc.getClaims();
+    const certificateVc = await responseClaims.certificate.dereference();
+    const certificateClaims = await certificateVc.getClaims();
+
+    console.log("Birth Certificate Details:", certificateClaims);
+  } catch (error) {
+    console.error("Error during Miko handling response:", error);
+  }
+}
+// miko_to_municipality_to_miko();
 
 app.post('/api/employment_offer',async(req,res)=>{
   try{

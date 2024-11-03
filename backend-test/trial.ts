@@ -1,5 +1,5 @@
-const express= require("express");
-import { Request, Response } from "express";  
+const express = require("express");
+import { Request, Response } from "express";
 const axios = require("axios");
 const cors = require("cors");
 const app = express();

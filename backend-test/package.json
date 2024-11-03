@@ -8,15 +8,20 @@
     "format": "prettier . --cache --write --log-level warn --ignore-path .gitignore --ignore-path .prettierignore",
     "typecheck": "tsc --noEmit",
     "start": " npx tsx server.ts",
+    "start1": "node --loader ts-node/esm server.ts",
     "dev": "nodemon -x ts-node server.ts"
   },
   "dependencies": {
     "@truvity/sdk": "^0.28.2",
     "axios": "^1.7.7",
+    "class-transformer": "^0.5.1",
+    "class-validator": "^0.14.1",
     "cors": "^2.8.5",
     "dotenv": "^10.0.0",
+    "esm": "^3.2.25",
     "express": "^4.21.1",
-    "nodemon": "^3.1.7"
+    "nodemon": "^3.1.7",
+    "reflect-metadata": "^0.2.2"
   },
   "devDependencies": {
     "@tsconfig/node20": "^20.1.4",

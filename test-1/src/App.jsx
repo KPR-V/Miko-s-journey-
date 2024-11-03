@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { CheckCircle, Clock } from "lucide-react";
-
+import axios from 'axios';
 const ExpatWallet = () => {
   const [steps, setSteps] = useState([
     {
@@ -79,12 +79,7 @@ const ExpatWallet = () => {
     // Step 1 handler
     1: async ()=> {
       try {
-        const response = await axios.post('/api/employment-offer', {}, {
-          headers: {
-            'Accept': 'text/plain'
-          }
-        });
-        
+        const response = await axios.post('http://localhost:4081/api/employment_offer');
         if (response.status === 200) {
           console.log('Employment offer letter processed successfully');
         }
