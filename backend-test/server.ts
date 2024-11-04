@@ -609,6 +609,7 @@ async function miko_to_employer_to_miko() {
     );
     const responseClaims = await employmentcontractresponseVc.getClaims();
     const contractVc = await responseClaims.contract.dereference();
+    console.log("contract VC dereferenced",contractVc);
     const contractClaims = await contractVc.getClaims();
     console.log(
       `Employment contract details: ${contractClaims.nameofthecompany} (salary: $${
@@ -619,6 +620,7 @@ async function miko_to_employer_to_miko() {
     console.error("Error during miko handles response:", error);
   }
 }
+miko_to_employer_to_miko();
 // proof of identity
 //
 //
@@ -1681,7 +1683,7 @@ async function miko_to_rental() {
     console.error("Error during Miko handling rental response:", error);
   }
 }
-miko_to_Immigration_Authority_to_miko();
+// miko_to_Immigration_Authority_to_miko();
 app.post("/api/employment_offer", async (req, res) => {
   try {
     await miko_to_employer_to_miko();
@@ -1692,7 +1694,16 @@ app.post("/api/employment_offer", async (req, res) => {
     res.send("not working");
   }
 });
-
+app.post("/api/employment_offer", async (req, res) => {
+  try {
+    await miko_to_employer_to_miko();
+   res
+      .status(200)
+      .json({ message: "Employment offer letter processed successfully" });
+  } catch (error) {
+    res.send("not working");
+  }
+});
 app.listen(4081, () => {
   console.log("Server is running on port 4081");
 });
