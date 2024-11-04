@@ -79,7 +79,7 @@ CredEase is more than a digital wallet—it’s a companion for anyone navigatin
 
 ## Local working 
 
-To try the code on your local machine you can do as follows , Please raise issues if any concern 
+To try the code on your local machine you can do as following , Please raise issues if any concern 
 
 ```
 git clone https://github.com/kirat79/Miko-s-journey-.git
