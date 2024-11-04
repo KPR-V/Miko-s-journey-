@@ -17,6 +17,7 @@ CredEase is a comprehensive Digital Identity Wallet with an intuitive, guided to
 By automating the process of credential collection and interlinking, CredEase ensures that only verified, linked VCs are submitted to relevant entities, preserving data consistency and reducing errors or rejections.
 
 ## How We Built It
+
 We built CredEase using the following technologies and methods:
 
 - **Primary Language**: Developed primarily in **TypeScript**, ensuring robust and type-safe code.
@@ -24,9 +25,8 @@ We built CredEase using the following technologies and methods:
 - **Decentralized Identifiers (DIDs)**: Created unique DIDs by using the **Truvity Admin Panel** to generate API keys.
 - **Compliance Officer Panel**: Implemented a dedicated Compliance Officer Panel that enables bank officers to review and approve Miko’s Verifiable Credentials, facilitating the issuance of additional credentials as required.
 
+## User flow
 
-
-## User flow 
 This is the user flow of our web app
 
 Initial form filling
@@ -35,12 +35,11 @@ Initial form filling
 Filling Credentials
 <img src= "./images/2.png"></img>
 
-Completion midway 
+Completion midway
 <img src= "./images/3.png"></img>
 
-Miko's Journey 
+Miko's Journey
 <img src= "./images/4.png"></img>
-
 
 ## Challenges We Ran Into
 
@@ -76,10 +75,9 @@ Looking ahead, we have exciting plans to expand and refine CredEase:
 
 CredEase is more than a digital wallet—it’s a companion for anyone navigating the complexities of relocation, turning a daunting process into a guided, secure, and efficient journey.
 
+## Local working
 
-## Local working 
-
-To try the code on your local machine you can do as following , Please raise issues if any concern 
+To try the code on your local machine you can do as following , Please raise issues if any concern
 
 ```
 git clone https://github.com/kirat79/Miko-s-journey-.git
