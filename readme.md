@@ -83,12 +83,12 @@ To try the code on your local machine you can do as following , Please raise iss
 git clone https://github.com/kirat79/Miko-s-journey-.git
 
 # to run the backend
-cd backend-test
+cd Backend
 npm i
 npm run start1
 
 # to run the frontend
-cd test-1
+cd Frontend
 npm i
 npm run dev
 

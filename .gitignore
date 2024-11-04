@@ -1,6 +1,6 @@
 # Ignore node_modules directories
-backend-test/node_modules/
-test-1/node_modules/
+Backend/node_modules/
+Frontend/node_modules/
 
 # Ignore environment files
 .env
