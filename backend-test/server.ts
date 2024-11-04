@@ -620,7 +620,7 @@ async function miko_to_employer_to_miko() {
     console.error("Error during miko handles response:", error);
   }
 }
-miko_to_employer_to_miko();
+// miko_to_employer_to_miko();
 // proof of identity
 //
 //
@@ -1694,16 +1694,7 @@ app.post("/api/employment_offer", async (req, res) => {
     res.send("not working");
   }
 });
-app.post("/api/employment_offer", async (req, res) => {
-  try {
-    await miko_to_employer_to_miko();
-   res
-      .status(200)
-      .json({ message: "Employment offer letter processed successfully" });
-  } catch (error) {
-    res.send("not working");
-  }
-});
+
 app.listen(4081, () => {
   console.log("Server is running on port 4081");
 });
