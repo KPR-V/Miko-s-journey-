@@ -1,4 +1,9 @@
-<h1><center> CredEase </h1>
+# CredEase
+
+**🏆 Third Prize Winner in the Reusable Identity Track**  
+CredEase secured the **third prize** in the **Decentralized Identity Foundation 2024** hackathon under the Reusable Identity Track, winning a cash prize of **$300**.  
+
+---
 
 ## Inspiration
 
@@ -25,21 +30,21 @@ We built CredEase using the following technologies and methods:
 - **Decentralized Identifiers (DIDs)**: Created unique DIDs by using the **Truvity Admin Panel** to generate API keys.
 - **Compliance Officer Panel**: Implemented a dedicated Compliance Officer Panel that enables bank officers to review and approve Miko’s Verifiable Credentials, facilitating the issuance of additional credentials as required.
 
-## User flow
+## User Flow
 
-This is the user flow of our web app
+Below is the user flow of our web app:
 
-Initial form filling
-<img src= "./images/1.png"></img>
+![Initial form filling](./images/1.png)
+*Initial Form Filling*
 
-Filling Credentials
-<img src= "./images/2.png"></img>
+![Filling Credentials](./images/2.png)
+*Filling Credentials*
 
-Completion midway
-<img src= "./images/3.png"></img>
+![Completion midway](./images/3.png)
+*Completion Midway*
 
-Miko's Journey
-<img src= "./images/4.png"></img>
+![Miko's Journey](./images/4.png)
+*Miko's Journey*
 
 ## Challenges We Ran Into
 
@@ -52,6 +57,7 @@ The journey wasn’t without its challenges. Some of the significant hurdles inc
 
 ## Accomplishments That We’re Proud Of
 
+- **Third Prize Winner**: CredEase won the **third prize in the Reusable Identity Track** at the **Decentralized Identity Foundation 2024**, earning a prize of **$300**.
 - **Seamless User Flow**: We successfully created a user-friendly flow that guides expats through various relocation steps, making complex processes accessible and manageable.
 - **Compliance Panel**: We’re proud to have built a secure compliance panel that allows entities to verify and approve VCs efficiently. This feature ensures that only necessary documents are shared, enhancing security and efficiency.
 - **Automated To-Do List**: CredEase’s automated to-do list helps users organize and complete essential tasks without manual intervention. This feature is pivotal in reducing the stress associated with relocation and improves Miko’s experience significantly.
@@ -75,21 +81,20 @@ Looking ahead, we have exciting plans to expand and refine CredEase:
 
 CredEase is more than a digital wallet—it’s a companion for anyone navigating the complexities of relocation, turning a daunting process into a guided, secure, and efficient journey.
 
-## Local working
+## Local Working
 
-To try the code on your local machine you can do as following , Please raise issues if any concern
+To try the code on your local machine, follow these steps. Please raise issues if you encounter any concerns:
 
-```
+```bash
+# Clone the repository
 git clone https://github.com/kirat79/Miko-s-journey-.git
 
-# to run the backend
+# Run the backend
 cd Backend
-npm i
+npm install
 npm run start1
 
-# to run the frontend
+# Run the frontend
 cd Frontend
-npm i
+npm install
 npm run dev
-
-```

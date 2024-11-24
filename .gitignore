@@ -1,6 +1,7 @@
 # Ignore node_modules directories
 Backend/node_modules/
 Frontend/node_modules/
+Challenge-2/node_modules
 
 # Ignore environment files
 .env
