@@ -1,7 +1,7 @@
 # CredEase
 
 **🏆 <a href ="https://devpost.com/software/varun-channi-as-an-expat?ref_content=my-projects-tab&ref_feature=my_projects">Third Prize Winner in the Reusable Identity Track</a>**  
-CredEase secured the **third prize** in the **Decentralized Identity Foundation 2024** hackathon under the Reusable Identity Track, winning a cash prize of **$300**.  
+CredEase secured the **third prize** in the **Decentralized Identity Foundation 2024** hackathon under the Reusable Identity Track(Truvity challenge 1), winning a cash prize of **$300**.  
 
 ---
 
